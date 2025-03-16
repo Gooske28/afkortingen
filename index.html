@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afkortingen Opslaan</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #00ff00; text-align: center; }
+        input, button {
+            margin: 5px; padding: 10px; border: none; border-radius: 5px;
+            background: #222; color: #00ff00;
+        }
+        button { cursor: pointer; }
+        button:hover { background: #333; }
+        #afkortingenList { text-align: left; margin: auto; width: 50%; }
+        h1, h2 { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <h1>Afkortingen Lijst</h1>
+    <input type="text" id="afkorting" placeholder="Afkorting">
+    <input type="text" id="betekenis" placeholder="Betekenis">
+    <button onclick="voegAfkortingToe()">Toevoegen</button>
+    <h2>Zoek</h2>
+    <input type="text" id="zoekveld" placeholder="Zoek afkorting" oninput="zoekAfkorting()">
+    <div id="afkortingenList"></div>
+
+    <script>
+        // Firebase configuratie (Vervang dit met jouw Firebase projectgegevens)
+        const firebaseConfig = {
+            
+        };
+        
+        // Firebase initialiseren
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function voegAfkortingToe() {
+            let afkorting = document.getElementById('afkorting').value.trim();
+            let betekenis = document.getElementById('betekenis').value.trim();
+            if (afkorting && betekenis) {
+                db.collection("afkortingen").doc(afkorting).set({
+                    betekenis: betekenis
+                }).then(() => {
+                    console.log("Afkorting toegevoegd!");
+                    laadAfkortingen();
+                });
+            }
+        }
+
+        function laadAfkortingen() {
+            db.collection("afkortingen").get().then((querySnapshot) => {
+                let lijst = "<h2>Afkortingen</h2>";
+                querySnapshot.forEach((doc) => {
+                    lijst += `<p><strong>${doc.id}</strong>: ${doc.data().betekenis}</p>`;
+                });
+                document.getElementById("afkortingenList").innerHTML = lijst;
+            });
+        }
+        
+        function zoekAfkorting() {
+            let zoekterm = document.getElementById("zoekveld").value.toLowerCase();
+            db.collection("afkortingen").get().then((querySnapshot) => {
+                let lijst = "<h2>Afkortingen</h2>";
+                querySnapshot.forEach((doc) => {
+                    if (doc.id.toLowerCase().includes(zoekterm) || doc.data().betekenis.toLowerCase().includes(zoekterm)) {
+                        lijst += `<p><strong>${doc.id}</strong>: ${doc.data().betekenis}</p>`;
+                    }
+                });
+                document.getElementById("afkortingenList").innerHTML = lijst;
+            });
+        }
+
+        // Laad afkortingen bij het openen van de pagina
+        laadAfkortingen();
+    </script>
+</body>
+</html>
