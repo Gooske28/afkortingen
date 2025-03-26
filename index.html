@@ -8,6 +8,19 @@
         body {
             font-family: Arial, sans-serif;
         }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
         #message {
             display: none; /* Verberg het element */
             background-color: #f9f9f9;
@@ -18,9 +31,38 @@
     </style>
 </head>
 <body>
-    <h1>Mijn gebruikte afkortingen</h1>
-    <p>Deze website is erg saai...</p>
+    <h1>Afkortingen</h1>
+    <p>Hieronder vind je een lijst met veelgebruikte afkortingen:</p>
 
+    <!-- Tabel met afkortingen -->
+    <table>
+        <thead>
+            <tr>
+                <th>Afkorting</th>
+                <th>Betekenis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>HTML</td>
+                <td>HyperText Markup Language</td>
+            </tr>
+            <tr>
+                <td>CSS</td>
+                <td>Cascading Style Sheets</td>
+            </tr>
+            <tr>
+                <td>JS</td>
+                <td>JavaScript</td>
+            </tr>
+            <tr>
+                <td>API</td>
+                <td>Application Programming Interface</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Verborgen geheime informatie -->
     <div id="message"></div>
 
     <script>
