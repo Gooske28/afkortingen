@@ -134,8 +134,11 @@
         </tbody>
     </table>
 
-    <!-- Verborgen informatie -->
+   <!-- Verborgen geheime informatie -->
     <div id="message"></div>
+
+    <!-- Onzichtbaar element voor langdurige aanraking -->
+    <div id="touch-area" style="width: 100%; height: 50px;"></div>
 
     <script>
         // Beveiliging tegen rechtsklikken (contextmenu uitschakelen)
@@ -153,19 +156,38 @@
             }
         });
 
-        // Toetsencombinatie Ctrl + I om geheime informatie te tonen
+        // Functie om geheime informatie te tonen
+        function showSecret() {
+            const secretElement = document.getElementById('message');
+            if (!secretElement.innerHTML) {
+                // Voeg geheime informatie dynamisch toe
+                secretElement.innerHTML = `
+                    <h2>Geheime Informatie</h2>
+                    <p>Gefeliciteerd! Je hebt de geheime informatie ontgrendeld.</p>
+                `;
+            }
+            secretElement.style.display = 'block';
+        }
+
+        // Toetsencombinatie Ctrl + I
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && event.key === 'i') { // Toetsencombinatie Ctrl + I
-                const secretElement = document.getElementById('message');
-                if (!secretElement.innerHTML) {
-                    // Voeg geheime informatie dynamisch toe
-                    secretElement.innerHTML = `
-                        <h2>Geheime Informatie</h2>
-                        <p>Gefeliciteerd! Je hebt de geheime informatie ontgrendeld.</p>
-                    `;
-                }
-                secretElement.style.display = 'block';
+                showSecret();
             }
+        });
+
+        // Langdurige aanraking (long press)
+        let touchTimer;
+        const touchArea = document.getElementById('touch-area');
+        
+        touchArea.addEventListener('touchstart', () => {
+            touchTimer = setTimeout(() => {
+                showSecret();
+            }, 2000); // Langdurige aanraking van 2 seconden
+        });
+
+        touchArea.addEventListener('touchend', () => {
+            clearTimeout(touchTimer); // Annuleer als aanraking te kort is
         });
     </script>
 </body>
